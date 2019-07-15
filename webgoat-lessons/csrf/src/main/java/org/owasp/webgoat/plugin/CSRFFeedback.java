@@ -40,7 +40,7 @@ public class CSRFFeedback extends AssignmentEndpoint {
         try {
             objectMapper.readValue(feedback.getBytes(), Map.class);
         } catch (IOException e) {
-           return failed().feedback(ExceptionUtils.getStackTrace(e)).build();
+            return failed().feedback(ExceptionUtils.getStackTrace(e)).build();
         }
         boolean correctCSRF = requestContainsWebGoatCookie(request.getCookies()) && request.getContentType().equals(MediaType.TEXT_PLAIN_VALUE);
         correctCSRF &= hostOrRefererDifferentHost(request);
@@ -65,7 +65,11 @@ public class CSRFFeedback extends AssignmentEndpoint {
     private boolean hostOrRefererDifferentHost(HttpServletRequest request) {
         String referer = request.getHeader("referer");
         String host = request.getHeader("host");
-        return !StringUtils.contains(referer, host);
+        if (referer != null) {
+            return !referer.contains(host);
+        } else {
+            return true;
+        }
     }
 
     private boolean requestContainsWebGoatCookie(Cookie[] cookies) {

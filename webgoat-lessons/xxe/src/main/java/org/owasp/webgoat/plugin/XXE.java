@@ -53,12 +53,12 @@ public class XXE extends NewLesson {
 
     @Override
     public Integer getDefaultRanking() {
-        return 1;
+        return 4;
     }
 
     @Override
     public String getTitle() {
-        return "XXE";
+        return "xxe.title";
     }
 
     @Override

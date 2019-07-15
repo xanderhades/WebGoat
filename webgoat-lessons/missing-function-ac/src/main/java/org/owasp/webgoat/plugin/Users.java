@@ -1,6 +1,5 @@
 package org.owasp.webgoat.plugin;
 
-import com.sun.org.apache.xpath.internal.axes.HasPositionalPredChecker;
 import org.owasp.webgoat.assignments.Endpoint;
 import org.owasp.webgoat.session.DatabaseUtilities;
 import org.owasp.webgoat.session.UserSessionData;
@@ -13,9 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
 import java.util.HashMap;
-import java.util.Map;
-
-import static javax.swing.UIManager.getString;
 
 public class Users extends Endpoint{
 
@@ -51,7 +47,7 @@ public class Users extends Endpoint{
                         userMap.put("cc", results.getString(3));
                         userMap.put("ccType", results.getString(4));
                         userMap.put("cookie", results.getString(5));
-                        userMap.put("loginCOunt",Integer.toString(results.getInt(6)));
+                        userMap.put("loginCount",Integer.toString(results.getInt(6)));
                         allUsersMap.put(id,userMap);
                     }
                     userSessionData.setValue("allUsers",allUsersMap);

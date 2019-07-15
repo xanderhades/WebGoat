@@ -46,7 +46,6 @@ public class Flag extends Endpoint {
     @PostConstruct
     public void initFlags() {
         IntStream.range(1, 10).forEach(i -> FLAGS.put(i, UUID.randomUUID().toString()));
-        FLAGS.entrySet().stream().forEach(e -> log.debug("Flag {} {}", e.getKey(), e.getValue()));
     }
 
     @Override
@@ -57,7 +56,7 @@ public class Flag extends Endpoint {
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public AttackResult postFlag(@RequestParam String flag) {
-        UserTracker userTracker = userTrackerRepository.findOne(webSession.getUserName());
+        UserTracker userTracker = userTrackerRepository.findByUser(webSession.getUserName());
         String currentChallenge = webSession.getCurrentLesson().getName();
         int challengeNumber = Integer.valueOf(currentChallenge.substring(currentChallenge.length() - 1, currentChallenge.length()));
         String expectedFlag = FLAGS.get(challengeNumber);

@@ -81,6 +81,39 @@ public class CreateDB {
         }
     }
 
+    /**
+     * Description of the Method
+     *
+     * @param connection Description of the Parameter
+     * @throws SQLException Description of the Exception
+     */
+    private void createJWTKeys(Connection connection) throws SQLException {
+        Statement statement = connection.createStatement();
+
+        // Drop servers table
+        try {
+            String dropTable = "DROP TABLE jwt_keys";
+            statement.executeUpdate(dropTable);
+        } catch (SQLException e) {
+            System.out.println("Info - Could not drop jwtkeys table");
+        }
+
+        // Create the new table
+        try {
+            String createTableStatement = "CREATE TABLE jwt_keys"
+                    + " (" + "id varchar(20),"
+                    + "key varchar(20))";
+            statement.executeUpdate(createTableStatement);
+
+            String insertData1 = "INSERT INTO jwt_keys VALUES ('webgoat_key', 'qwertyqwerty1234')";
+            String insertData2 = "INSERT INTO jwt_keys VALUES ('webwolf_key', 'doesnotreallymatter')";
+            statement.executeUpdate(insertData1);
+            statement.executeUpdate(insertData2);
+        } catch (SQLException e) {
+            System.out.println("Error creating product table " + e.getLocalizedMessage());
+        }
+    }
+
 
     /**
      * Description of the Method
@@ -199,7 +232,7 @@ public class CreateDB {
 
         // Create the new table
         try {
-            String createTableStatement = "CREATE TABLE user_system_data (" + "userid varchar(5) not null primary key,"
+            String createTableStatement = "CREATE TABLE user_system_data (" + "userid int not null primary key,"
                     + "user_name varchar(12)," + "password varchar(10)," + "cookie varchar(30)" + ")";
             statement.executeUpdate(createTableStatement);
         } catch (SQLException e) {
@@ -207,11 +240,11 @@ public class CreateDB {
         }
 
         // Populate
-        String insertData1 = "INSERT INTO user_system_data VALUES ('101','jsnow','passwd1', '')";
-        String insertData2 = "INSERT INTO user_system_data VALUES ('102','jdoe','passwd2', '')";
-        String insertData3 = "INSERT INTO user_system_data VALUES ('103','jplane','passwd3', '')";
-        String insertData4 = "INSERT INTO user_system_data VALUES ('104','jeff','jeff', '')";
-        String insertData5 = "INSERT INTO user_system_data VALUES ('105','dave','dave', '')";
+        String insertData1 = "INSERT INTO user_system_data VALUES (101,'jsnow','passwd1', '')";
+        String insertData2 = "INSERT INTO user_system_data VALUES (102,'jdoe','passwd2', '')";
+        String insertData3 = "INSERT INTO user_system_data VALUES (103,'jplane','passwd3', '')";
+        String insertData4 = "INSERT INTO user_system_data VALUES (104,'jeff','jeff', '')";
+        String insertData5 = "INSERT INTO user_system_data VALUES (105,'dave','passW0rD', '')";
         statement.executeUpdate(insertData1);
         statement.executeUpdate(insertData2);
         statement.executeUpdate(insertData3);
@@ -950,6 +983,64 @@ public class CreateDB {
     }
 
     /**
+     * Creates the table used in SQL-Injections (introduction)
+     */
+    private void createEmployeesTable(Connection connection) throws SQLException {
+        Statement statement = connection.createStatement();
+
+        // Drop employees and access_log tables
+        try {
+            statement.executeUpdate("DROP TABLE employees");
+        } catch (SQLException e) {
+            System.out.println("Info - Could not drop employees table");
+        }
+        try {
+            statement.executeUpdate("DROP TABLE access_log");
+        } catch (SQLException e) {
+            System.out.println("Info - Could not drop access_log table");
+        }
+
+        // Create the employees table
+        try {
+            String createTableStatement = "CREATE TABLE employees ("
+                    + "userid varchar(6) not null primary key,"
+                    + "first_name varchar(20),"
+                    + "last_name varchar(20),"
+                    + "department varchar(20),"
+                    + "salary int,"
+                    + "auth_tan varchar(6)"
+                    + ")";
+            statement.executeUpdate(createTableStatement);
+        } catch (SQLException e) {
+            System.out.println("Error creating employees table " + e.getLocalizedMessage());
+        }
+
+        // Populate
+        String insertData1 = "INSERT INTO employees VALUES ('32147','Paulina',  'Travers', 'Accounting',  46000, 'P45JSI')";
+        String insertData2 = "INSERT INTO employees VALUES ('89762','Tobi',     'Barnett', 'Development', 77000, 'TA9LL1')";
+        String insertData3 = "INSERT INTO employees VALUES ('96134','Bob',      'Franco',  'Marketing',   83700, 'LO9S2V')";
+        String insertData4 = "INSERT INTO employees VALUES ('34477','Abraham ', 'Holman',  'Development', 50000, 'UU2ALK')";
+        String insertData5 = "INSERT INTO employees VALUES ('37648','John',     'Smith',   'Marketing',   64350, '3SL99A')";
+        statement.executeUpdate(insertData1);
+        statement.executeUpdate(insertData2);
+        statement.executeUpdate(insertData3);
+        statement.executeUpdate(insertData4);
+        statement.executeUpdate(insertData5);
+
+        // Create the logging table
+        try {
+            String createTableStatement = "CREATE TABLE access_log ("
+                    + "id int not null primary key identity,"
+                    + "time varchar(50),"
+                    + "action varchar(200)"
+                    + ")";
+            statement.executeUpdate(createTableStatement);
+        } catch (SQLException e) {
+            System.out.println("Error creating access_log table " + e.getLocalizedMessage());
+        }
+    }
+
+    /**
      * Description of the Method
      *
      * @param connection Description of the Parameter
@@ -975,6 +1066,8 @@ public class CreateDB {
         createTanTable(connection);
         createMFEImagesTable(connection);
         createModifyWithSQLLessonTable(connection);
+        createJWTKeys(connection);
+        createEmployeesTable(connection);
         System.out.println("Success: creating tables.");
     }
 }

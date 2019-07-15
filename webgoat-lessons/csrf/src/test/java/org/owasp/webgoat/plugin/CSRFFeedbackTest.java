@@ -52,7 +52,4 @@ public class CSRFFeedbackTest extends LessonTest {
                 .andExpect(jsonPath("lessonCompleted", is(true)))
                 .andExpect(jsonPath("feedback", StringContains.containsString("the flag is: ")));
     }
-
-
-
 }
